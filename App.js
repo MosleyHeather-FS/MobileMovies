@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, Switch, StyleSheet, Text, View, Button, Platform } from 'react-native';
+import { ImageBackground,SafeAreaView, Switch, StyleSheet, Text, View, Button, Platform } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as Network from 'expo-network';
 
-import Categories from './Categories';
-import Details from './Details';
-import Heading from './components/Heading';
-import ListContainer from './components/ListContainer';
+import Recommend from './pages/Recommend';
+import Movies from './pages/Movies';
+import cinema from './assets/cinema.jpeg'
 import styles from './Appstyles'
 
 function HomeScreen({navigation}) {
@@ -20,16 +19,10 @@ function HomeScreen({navigation}) {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+  <ImageBackground source={cinema} resizeMode="cover" style={[styles.image, styles.container]}>
+    <SafeAreaView>
       <Text style={[styles.largeHeading, styles.font]}>Home</Text>
-      <Heading>This is a Heading</Heading>
-      {/* {
-        Platform.OS === 'ios'
-        ? <Text style={[styles.largeHeading, styles.font]}>I am IOS</Text>
-        : <Text style={[styles.largeHeading, styles.font]}> I am NOT on IOS</Text>
-      } */}
-      <Button title='Go to Details' onPress={() => navigation.navigate('Details')} />
-      <ListContainer />
+      <Button color="white" title='Go to Movies' onPress={() => navigation.navigate('Movies')} />
       <Switch 
         trackColor={{false: "#767577", true: "#81b0ff"}}
         thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -38,25 +31,27 @@ function HomeScreen({navigation}) {
         value={isEnabled}
     />
       <StatusBar style="auto" />
-    </SafeAreaView>
+   
+      {/* {
+        Platform.OS === 'ios'
+        ? <Text style={[styles.largeHeading, styles.font]}>I am IOS</Text>
+        : <Text style={[styles.largeHeading, styles.font]}> I am NOT on IOS</Text>
+      } */}
+    </SafeAreaView> 
+    </ImageBackground>
   );
 }
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
-  // https://crudmovieapi.herokuapp.com/
-  fetch(`https://crudmovieapi.herokuapp.com/api/v1/movies`)
-  .then(res => res.json())
-  .then(data => console.log({data}))
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} options={{title: 'My Movies'}}/>
-        <Stack.Screen name="Details" component={Details} />
-        <Stack.Screen name="Categories" component={Categories} />
+        <Stack.Screen name="Movies" component={Movies} />
+        <Stack.Screen name="Recommend" component={Recommend} />
       </Stack.Navigator>
     </NavigationContainer>
   );
